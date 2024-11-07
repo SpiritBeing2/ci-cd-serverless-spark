@@ -1,12 +1,12 @@
 name: Deployment test
 on:
   push:
-    branches:
+    branches: 
       - main
-    jobs:
-      build:
-        runs-on: ubuntu-latest
-        steps:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
         - uses: actions/checkout@v2
         - name: Set up Python 3.8
           uses: actions/setup-python@v2
@@ -23,7 +23,7 @@ on:
           with:
             name: traffic.py
             path: traffic.py
-      deploy:
+  deploy:
         needs: build
         runs-on: ubuntu-latest
         steps:
