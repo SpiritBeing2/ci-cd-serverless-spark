@@ -22,6 +22,7 @@ jobs:
       - name: display current environnement
         run : |
           echo $env_name
+          echo $env_name
       - name: display current directory
         run : |
           ls -la
