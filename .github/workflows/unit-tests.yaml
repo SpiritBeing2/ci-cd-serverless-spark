@@ -6,7 +6,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: $env_name
+    environment: developpement
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.8
@@ -34,7 +34,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: $env_name
+    environment: developpement
     env:
       prefix: ${{ vars.PREFIX }}
     steps:
