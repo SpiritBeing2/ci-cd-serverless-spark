@@ -6,7 +6,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: developpement
+    environment: 
+      name: ${{ github.ref_name == 'main' && 'production' || 'developpement' }} 
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.8
@@ -34,7 +35,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: developpement
+    environment:
+      name: ${{ github.ref_name == 'main' && 'production' || 'developpement' }}
     env:
       prefix: ${{ vars.PREFIX }}
     steps:
