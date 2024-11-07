@@ -34,7 +34,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: $env_name
+    environment: developpement
     steps:
       - name: Download python script from build
         uses: actions/download-artifact@v4
