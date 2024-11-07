@@ -1,14 +1,17 @@
 name: Deployment test
 on:
   push:
+  pull_request:
+    types: [closed]
     branches:
-      - main
+      - 'main'
 env:
   env_name: ${{ github.ref_name == 'main' && 'production' || 'developpement' }}
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: $env_name
+    environment: 
+      name: ${{ github.ref_name == 'main' && 'production' || 'developpement' }} 
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.8
@@ -21,6 +24,7 @@ jobs:
           pip install nbconvert
       - name: display current environnement
         run : |
+          echo $env_name
           echo $env_name
       - name: display current directory
         run : |
@@ -35,6 +39,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'main' && 'production' || 'developpement' }}
+    env:
+      prefix: ${{ vars.PREFIX }}
     steps:
       - name: Download python script from build
         uses: actions/download-artifact@v4
@@ -51,5 +59,9 @@ jobs:
           echo "[default]
           aws_access_key_id = $AWS_ACCESS_KEY_ID
           aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/credentials
+      - name: Display prefix
+        run: |
+         echo $prefix
+         echo $env_name 
       - name: Upload to S3
-        run: aws s3 cp traffic.py s3://${{secrets.S3_BUCKET}}/traffic_${GITHUB_SHA}.py --region us-east-1
+        run: aws s3 cp traffic.py s3://${{secrets.S3_BUCKET}}/$prefix/traffic_${GITHUB_SHA}.py --region us-east-1
