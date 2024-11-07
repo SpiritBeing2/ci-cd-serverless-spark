@@ -17,7 +17,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install nbconvert
       - name: Convert notebook
-        run: jupyter nbconvert --to python traffic.ipynb
+        run: jupyter nbconvert --to python ../../traffic.ipynb
       - name: Upload python script
         uses: actions/upload-artifact@v4
         with:
