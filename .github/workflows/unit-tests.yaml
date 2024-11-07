@@ -53,6 +53,6 @@ jobs:
           aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/credentials
       - name: Display prefix
         run: |
-         echo ${{vars.prefix}} 
+         echo ${{ vars.prefix }} 
       - name: Upload to S3
-        run: aws s3 cp traffic.py s3://${{vars.prefix}}/${{secrets.S3_BUCKET}}/traffic_${GITHUB_SHA}.py --region us-east-1
+        run: aws s3 cp traffic.py s3://${{ vars.prefix }}/${{secrets.S3_BUCKET}}/traffic_${GITHUB_SHA}.py --region us-east-1
