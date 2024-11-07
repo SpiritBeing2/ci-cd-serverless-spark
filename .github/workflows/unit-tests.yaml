@@ -58,4 +58,4 @@ jobs:
          echo $prefix
          echo $env_name 
       - name: Upload to S3
-        run: aws s3 cp traffic.py s3://$prefix/${{secrets.S3_BUCKET}}/traffic_${GITHUB_SHA}.py --region us-east-1
+        run: aws s3 cp traffic.py s3://${{secrets.S3_BUCKET}}/$prefix/traffic_${GITHUB_SHA}.py --region us-east-1
