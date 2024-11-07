@@ -35,6 +35,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment: developpement
+    env:
+      prefix: ${{ vars.PREFIX }}
     steps:
       - name: Download python script from build
         uses: actions/download-artifact@v4
@@ -53,7 +55,7 @@ jobs:
           aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/credentials
       - name: Display prefix
         run: |
-         echo ${{ env.PREFIX }}
+         echo $prefix
          echo $env_name 
       - name: Upload to S3
-        run: aws s3 cp traffic.py s3://${{ env.PREFIX }}/${{secrets.S3_BUCKET}}/traffic_${GITHUB_SHA}.py --region us-east-1
+        run: aws s3 cp traffic.py s3://$prefix/${{secrets.S3_BUCKET}}/traffic_${GITHUB_SHA}.py --region us-east-1
