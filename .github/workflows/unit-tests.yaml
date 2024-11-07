@@ -8,48 +8,17 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: $env_name
+    environment: ${{ github.ref_name == 'main' && 'production' || 'developpement' }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.8
         uses: actions/setup-python@v5
         with:
           python-version: '3.8'
-      - name: Install nbconvert
-        run: |
-          python -m pip install --upgrade pip
-          pip install nbconvert
-      - name: display current environnement
-        run : |
-          echo $env_name
-      - name: display current directory
-        run : |
-          ls -la
-      - name: Convert notebook
-        run: jupyter nbconvert --to python traffic.ipynb
-      - name: Upload python script
-        uses: actions/upload-artifact@v4
+      - name: Set up jdk11
+        uses: actions/setup-java@v4
         with:
-          name: traffic.py
-          path: traffic.py
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download python script from build
-        uses: actions/download-artifact@v4
-        with:
-          name: traffic.py
-      - name: Set up AWS credentials
-        shell: bash
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          mkdir -p ~/.aws
-          touch ~/.aws/credentials
-          echo "[default]
-          aws_access_key_id = $AWS_ACCESS_KEY_ID
-          aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" > ~/.aws/credentials
-      - name: Upload to S3
-        run: aws s3 cp traffic.py s3://${{secrets.S3_BUCKET}}/traffic_${GITHUB_SHA}.py --region us-east-1
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Run the Maven verify phase
+        run: mvn --batch-mode --update-snpashots verify
