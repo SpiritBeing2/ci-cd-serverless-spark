@@ -19,7 +19,7 @@ jobs:
       - name: Convert notebook
         run: jupyter nbconvert --to python traffic.ipynb
       - name: Upload python script
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: traffic.py
           path: traffic.py
