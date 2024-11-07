@@ -1,8 +1,6 @@
 name: Deployment test
 on:
   push:
-    branches:
-      - main
 env:
   env_name: ${{ github.ref_name == 'main' && 'production' || 'developpement' }}
 jobs:
