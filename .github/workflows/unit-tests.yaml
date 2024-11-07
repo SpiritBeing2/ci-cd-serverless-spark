@@ -21,7 +21,7 @@ jobs:
           pip install nbconvert
       - name: display current environnement
         run : |
-          echo $GITHUB_ENV
+          echo $env_name
       - name: display current directory
         run : |
           ls -la
